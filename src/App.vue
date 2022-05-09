@@ -6,7 +6,7 @@
 
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
-import ShowContent from "./components/ShowContent.vue";
+import ShowContent from "./components/WrapperTab.vue";
 
 export default {
   name: "App",
