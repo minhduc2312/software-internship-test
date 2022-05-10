@@ -50,11 +50,9 @@ export default {
       const db = getFirestore(app);
       const idDoc = user.path[1].dataset["id"];
 
-      console.log(this.$props.users);
       await deleteDoc(doc(db, "UserContact", idDoc)).then(() => {
         const indexOfId = this.$props.users?.indexOf(idDoc);
         this.$props.users.splice(indexOfId, 1);
-        console.log(this.$props.users);
       });
     },
   },
