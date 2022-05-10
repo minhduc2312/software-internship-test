@@ -42,15 +42,29 @@
       </div>
       <div class="form__submit">
         <input type="submit" value="Submit" />
-        <input class="button__clear" type="button" value="Clear" />
+        <input
+          class="button__clear"
+          @click="clearForm"
+          type="button"
+          value="Clear"
+        />
       </div>
     </form>
   </div>
 </template>
 
 <script>
+import { app } from "./db/connectDb.js";
+import {
+  addDoc,
+  collection,
+  getFirestore 
+} from "firebase/firestore";
+
 export default {
-  setup() {},
+  setup() {
+    console.log(app);
+  },
   data() {
     return {
       errors: [],
@@ -76,6 +90,7 @@ export default {
           content: this.content,
         };
         console.log(data);
+        this.addUserDb(data);
       }
 
       this.errors = [];
@@ -83,6 +98,16 @@ export default {
       // console.log(result);
 
       e.preventDefault();
+    },
+    clearForm() {
+      console.log("clear");
+      this.fullName = "";
+      this.email = "";
+      this.phone = "";
+      this.content = "";
+    },
+    addUserDb: async function (data) {
+      await addDoc(collection(getFirestore(this.app), "UserContact"), data);
     },
   },
 };
