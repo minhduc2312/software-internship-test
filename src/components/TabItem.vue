@@ -1,6 +1,8 @@
 <template lang="html">
-  <div class='tab__content' v-show='title===selectedTitle'>
-    <slot ></slot>
+  <div class='wrap__content'>
+    <div class='tab__content' v-show='title===selectedTitle'>
+        <slot ></slot>
+      </div>
   </div>
 </template>
 
@@ -19,3 +21,4 @@ export default {
 
 <style lang="css">
 </style>
+

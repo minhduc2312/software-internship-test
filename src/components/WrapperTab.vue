@@ -2,9 +2,12 @@
 <div class="wrapper">
  <TabsView class="content">
     <TabItem title="Test 1">
-      <FindMax5/>
+      <FindMax/>
+      <FindFrequent/>
     </TabItem>
-    <TabItem title="Test 2">Hello From Tab 2</TabItem>
+    <TabItem title="Test 2">
+      <FormUser></FormUser>
+    </TabItem>
   </TabsView>
 </div>
 </template>
@@ -12,14 +15,18 @@
 <script>
 import TabsView from "./TabsView.vue";
 import TabItem from "./TabItem.vue";
-import FindMax5 from "./Test1/FindMax5.vue";
+import FindMax from "./Test1/FindMax.vue";
+import FindFrequent from "./Test1/FindFrequent.vue";
+import FormUser from "./Test2/FormUser.vue";
 
 export default {
   name: "ShowContent",
   components: {
     TabsView,
     TabItem,
-    FindMax5
+    FindMax,
+    FindFrequent,
+    FormUser,
   },
 };
 </script>
@@ -43,5 +50,9 @@ export default {
   font-size: 1em;
   margin-bottom: 10px;
   padding: 5px;
+}
+.wrap__content {
+  display: flex;
+  justify-content: center;
 }
 </style>

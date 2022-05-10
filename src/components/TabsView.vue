@@ -50,10 +50,11 @@ ul.tabs__header > li.tab__selected {
   border-bottom: 8px solid transparent;
 }
 .tab__content {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
   color: black;
   padding: 20px;
-  min-width: 800px;
+  width: 800px;
   border-radius: 10px;
   min-height: 400px;
 }

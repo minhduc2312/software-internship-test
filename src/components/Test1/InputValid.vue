@@ -1,12 +1,13 @@
 <template>
-  <div id="test__find5max">
-    <p>FindMax5: Please input array</p>
-    <p>{{ inputArray }}</p>
+  <div :id="id">
+    <p><slot></slot></p>
+    <p class="input__display">{{ inputArray }}</p>
     <input class="input__field" v-model="inputArray" placeholder="" />
+
     <div class="button">
-      <button @click="submit">Submit</button>
-      <button @click="randomArray">Random</button>
-      <button @click="clear">Clear</button>
+      <button @click="handleSubmit">Submit</button>
+      <button @click="handleRandomArray">Random</button>
+      <button @click="handleClear">Clear</button>
     </div>
 
     <template v-if="result">
@@ -16,36 +17,30 @@
 </template>
 
 <script>
-const quickSort = (arr) => {
-  if (arr.length < 2) return arr;
-  const pivotIndex = arr.length - 1;
-  const pivot = Number(arr[pivotIndex]);
-
-  const left = [];
-  const right = [];
-
-  for (let i = 0; i < pivotIndex; i++) {
-    const currentItem = Number(arr[i]);
-
-    if (currentItem > pivot) {
-      left.push(currentItem);
-    } else {
-      right.push(currentItem);
-    }
-  }
-
-  return [...quickSort(left), pivot, ...quickSort(right)];
-};
+import { FormKit } from "@formkit/vue";
 export default {
-  name: "FindMax5",
+  setup() {},
   data() {
     return {
       inputArray: "",
-      result: undefined,
+      isSubmit: false,
+      FormKit,
     };
   },
+  updated() {
+    if (this.isSubmit) {
+      this.inputArray = this.$props.input;
+    }
+    this.isSubmit = false;
+  },
+  props: ["submit", "randomArray", "clear", "input", "result", "id"],
   methods: {
-    submit() {
+    handleRandomArray() {
+      this.$props.randomArray();
+      this.inputArray = this.$props.input;
+      this.isSubmit = true;
+    },
+    handleSubmit() {
       const formatInput = [];
       if (this.inputArray !== "") {
         if (
@@ -65,11 +60,12 @@ export default {
             this.inputArray = this.inputArray.slice(0, lengthStringInput - 1);
           }
           const input = this.inputArray.split(",");
-          formatInput.push(...input)
+          formatInput.push(...input);
         }
 
         if (formatInput.length !== 0 && formatInput !== "") {
-          this.result = quickSort(formatInput).slice(0, 5);
+          this.$props.submit(formatInput);
+          this.isSubmit = true;
 
           //simple way
           // this.result = input
@@ -78,21 +74,9 @@ export default {
         }
       }
     },
-    clear() {
+    handleClear() {
       this.inputArray = "";
-      this.result = "";
-    },
-    randomArray() {
-      const result = [];
-      const maxNum = 100;
-      const minLength = 3;
-      const maxLength = 15 - minLength;
-      const lengthArray = minLength + Math.floor(Math.random() * maxLength);
-      for (let i = 0; i < lengthArray; i++) {
-        result.push(Math.floor(Math.random() * maxNum));
-      }
-      this.inputArray = result;
-      this.submit();
+      this.$props.clear();
     },
   },
 };
@@ -107,11 +91,22 @@ export default {
   margin-bottom: 5px;
 }
 .button button {
-  padding: 2px;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
   cursor: pointer;
+  background-color: antiquewhite;
 }
 .input__field {
   padding: 5px;
   border-radius: 5px;
+  border: 1px solid black;
+}
+.input__display {
+  line-break: anywhere;
+}
+#test__findMax5,
+#test__findFrequent {
+  width: 50%;
 }
 </style>
