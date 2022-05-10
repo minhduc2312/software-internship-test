@@ -50,20 +50,31 @@
         />
       </div>
     </form>
+    <div>
+      <DataTable :users="users" :reload="getUsersDb" />
+    </div>
   </div>
 </template>
 
 <script>
 import { app } from "./db/connectDb.js";
+import DataTable from "./DataTable.vue";
 import {
   addDoc,
   collection,
-  getFirestore 
+  getFirestore,
+  getDocs,
+  query,
+  orderBy,
 } from "firebase/firestore";
 
 export default {
-  setup() {
-    console.log(app);
+  setup() {},
+  components: {
+    DataTable,
+  },
+  mounted() {
+    this.getUsersDb();
   },
   data() {
     return {
@@ -72,6 +83,8 @@ export default {
       email: "",
       phone: "",
       content: "",
+      db: getFirestore(app),
+      users: [],
     };
   },
   methods: {
@@ -80,7 +93,6 @@ export default {
         "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
       );
       let result = patternPhone.test(this.phone);
-      console.log(result);
 
       if (result) {
         const data = {
@@ -88,8 +100,8 @@ export default {
           email: this.email,
           phone: this.phone,
           content: this.content,
+          createAt: new Date().toLocaleString(),
         };
-        console.log(data);
         this.addUserDb(data);
       }
 
@@ -100,14 +112,29 @@ export default {
       e.preventDefault();
     },
     clearForm() {
-      console.log("clear");
       this.fullName = "";
       this.email = "";
       this.phone = "";
       this.content = "";
     },
     addUserDb: async function (data) {
-      await addDoc(collection(getFirestore(this.app), "UserContact"), data);
+      await addDoc(collection(this.db, "UserContact"), data).then((user) => {
+        this.users.push({ id: user.id, ...data });
+
+        this.clearForm();
+      });
+    },
+    getUsersDb: async function () {
+      const q = query(
+        collection(this.db, "UserContact"),
+        orderBy("createAt", "asc")
+      );
+      this.users = [];
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        this.users.push({ id: doc.id, ...doc.data() });
+      });
     },
   },
 };
@@ -117,8 +144,7 @@ export default {
 #form__contact {
   margin-top: 10px;
   width: 250px;
-  display: flex;
-  flex-direction: column;
+  display: inline-block;
   gap: 15px;
 }
 .form__input {
@@ -149,5 +175,12 @@ textarea {
 }
 .button__clear {
   background-color: #f79494 !important;
+}
+.form__input,
+.form__submit {
+  margin-bottom: 10px;
+}
+.test2__form {
+  width: 100%;
 }
 </style>
