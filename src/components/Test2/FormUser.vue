@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { app } from "./db/connectDb.js";
+import { app } from "./db/ConnectDB.js";
 import DataTable from "./DataTable.vue";
 import {
   addDoc,
@@ -69,7 +69,8 @@ import {
 } from "firebase/firestore";
 
 export default {
-  setup() {},
+  setup() {
+  },
   components: {
     DataTable,
   },

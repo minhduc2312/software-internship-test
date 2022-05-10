@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { app } from "./db/connectDb.js";
+import { app } from "./db/ConnectDB.js";
 import { getFirestore, doc, deleteDoc } from "firebase/firestore";
 export default {
   name: "DataTable",
